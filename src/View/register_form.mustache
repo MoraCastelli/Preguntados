@@ -1,0 +1,46 @@
+{{> header }}
+<h1>Register</h1>
+{{#success}}
+    <p class="success">{{success}}</p>
+{{/success}}
+{{#error}}
+    <p class="error">{{error}}</p>
+{{/error}}
+<form method="POST" enctype="multipart/form-data">
+    <label for="full_name">Full Name:</label>
+    <input type="text" id="full_name" name="full_name" required>
+
+    <label for="birth_year">Year of Birth:</label>
+    <input type="number" id="birth_year" name="birth_year" required>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+        <option value="Prefiero no cargarlo">Prefiero no cargarlo</option>
+    </select>
+
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" required>
+
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="confirm_password">Confirm Password:</label>
+    <input type="password" id="confirm_password" name="confirm_password" required>
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="profile_picture">Profile Picture:</label>
+    <input type="file" id="profile_picture" name="profile_picture" required>
+
+    <button type="submit">Register</button>
+</form>
+{{> footer }}

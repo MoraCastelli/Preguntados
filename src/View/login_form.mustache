@@ -1,0 +1,15 @@
+{{> header }}
+<h1>Login</h1>
+{{#error}}
+    <p class="error">{{error}}</p>
+{{/error}}
+<form method="POST">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Login</button>
+</form>
+{{> footer }}
