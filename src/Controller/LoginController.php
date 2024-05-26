@@ -1,12 +1,6 @@
 <?php
-
-
-
 class LoginController
 {
-
-
-
     private $presenter;
     private $model;
 
@@ -35,12 +29,8 @@ class LoginController
             $_SESSION["error_login"] = "Por favor, ingresa tus credenciales.";
         }
 
-
-
         $this->redirect();
-
     }
-
 
     public function logout()
     {
@@ -50,9 +40,6 @@ class LoginController
         $this->redirect();
 
     }
-
-
-
 
     private function redirect()
     {
