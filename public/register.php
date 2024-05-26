@@ -5,7 +5,7 @@ require_once '../src/Util/EmailSender.php';
 require_once '../src/View/Template.php';
 
 $template = new Template();
-$database =
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $fullName = $_POST['full_name'];

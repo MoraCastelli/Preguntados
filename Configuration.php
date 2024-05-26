@@ -21,7 +21,9 @@ class Configuration
 
 
     //model
-
+    public static function getUserModel(){
+        return new UserModel(self::Database());
+    }
 
     //Helper
     public static function getRouter(){
