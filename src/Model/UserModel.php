@@ -1,7 +1,5 @@
 <?php
 
-namespace Model;
-
 class UserModel
 {
     private $database;
@@ -11,7 +9,11 @@ class UserModel
         $this->database = $database;
     }
 
-    public function registrarUsuario(){
-        return $this->database->query("query para insertar en la bd");
-    }
+// ta rotisimo
+    public function registrarUsuario($nombre,  $apellido, $ano_de_nacimiento ,$sexo, $mail , $contrasena, $nombre_de_usuario, $foto_de_perfil){
+    //     return $this->database->execute("INSERT INTO usuario (nombre, apellido, ano_de_nacimiento, sexo, mail, contrasena, nombre_de_usuario, foto_de_perfil)
+    //     VALUES (". $nombre. ", ". $apellido. ", ". $ano_de_nacimiento . ", ". $sexo .", " . $mail . ", " . $contrasena .", ". $nombre_de_usuario . ", " . $foto_de_perfil. ")");
+    // 
+    header ('location : index.php?controller=home&method=get');
+}
 }

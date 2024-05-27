@@ -1,46 +1,49 @@
 {{> header }}
-<h1>Register</h1>
+<h1>Registro de usuario</h1>
 {{#success}}
     <p class="success">{{success}}</p>
 {{/success}}
 {{#error}}
     <p class="error">{{error}}</p>
 {{/error}}
-<form method="POST" enctype="multipart/form-data">
-    <label for="full_name">Full Name:</label>
-    <input type="text" id="full_name" name="full_name" required>
+<form action= "index.php?controller=registro&method=insertar" method="POST" enctype="multipart/form-data">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br><br>
 
-    <label for="birth_year">Year of Birth:</label>
-    <input type="number" id="birth_year" name="birth_year" required>
+    <label for="apellido">Apellido:</label>
+    <input type="text" id="apellido" name="apellido"><br><br>
 
-    <label for="gender">Gender:</label>
-    <select id="gender" name="gender" required>
+    <label for="ano_de_nacimiento">Año de nacimiento:</label>
+    <input type="text" id="ano_de_nacimiento" name="ano_de_nacimiento"><br><br>
+
+    <label for="sexo">Sexo:</label>
+    <select id="sexo" name="sexo">
         <option value="Masculino">Masculino</option>
         <option value="Femenino">Femenino</option>
         <option value="Prefiero no cargarlo">Prefiero no cargarlo</option>
-    </select>
+    </select><br><br>
 
-    <label for="country">Country:</label>
-    <input type="text" id="country" name="country" required>
+    {{! <label for="country">Country:</label>
+    <input type="text" id="country" name="country"><br><br>
 
     <label for="city">City:</label>
-    <input type="text" id="city" name="city" required>
+    <input type="text" id="city" name="city"><br><br> }}
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+    <label for="mail">Email:</label>
+    <input type="mail" id="mail" name="mail"><br><br>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" name="contrasena"><br><br>
+    <label for="confirmar_contrasena">Confirmar contraseña:</label>
+    <input type="password" id="confirmar_contrasena" name="confirmar_contrasena"><br><br>
 
-    <label for="confirm_password">Confirm Password:</label>
-    <input type="password" id="confirm_password" name="confirm_password" required>
+    <label for="nombre_de_usuario">Nombre de usuario:</label>
+    <input type="text" id="nombre_de_usuario" name="nombre_de_usuario"><br><br>
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
+    <label for="foto_de_perfil">Foto de perfil:</label>
+    <input type="file" id="foto_de_perfil" name="foto_de_perfil"><br><br>
 
-    <label for="profile_picture">Profile Picture:</label>
-    <input type="file" id="profile_picture" name="profile_picture" required>
-
-    <button type="submit">Register</button>
+    <input type="submit" value="Registrar">
 </form>
+<a href="index.php?controller=Home&action=get">Volver al home</a>
 {{> footer }}

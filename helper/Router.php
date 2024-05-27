@@ -12,14 +12,6 @@ class Router
         $this->defaultMethod = $defaultMethod;
     }
 
-
-
-
-
-
-
-
-
     public function route($controllerName, $methodName)
     {
         $controller = $this->getControllerFrom($controllerName);
