@@ -15,11 +15,6 @@ class LoginController
 
     public function get()
     {
-
-
-
-
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["usuario"]) && isset($_POST["password"])) {
             $usuario = $_POST["usuario"];
             $password = $_POST["password"];
@@ -36,7 +31,6 @@ class LoginController
             $_SESSION["error_login"] = "Por favor, ingresa tus credenciales.";
         }
 
-        // Redirigir a la página principal del Pokedex
         header("Location:index.php?controller=Home&action=get");
         exit();
     }

@@ -1,6 +1,4 @@
 <?php
-
-
 class   UserModel
 {
     private $database;
@@ -18,13 +16,7 @@ class   UserModel
 
 
         $this->database->execute($sql);
-
-
-
     }
-
-
-
 
         public function LogInconsulta($usuario, $password)
     {
@@ -35,17 +27,19 @@ class   UserModel
 
         // Si se encuentra un resultado, es válido
         return $result->num_rows == 1 && $this->emailVerificado();
-
-
-
     }
 
     private function emailVerificado()
     {
      //falta agregar lo del mail
         return True;
-
     }
 
-
+    public function verPerfil(){
+        $usuario = $_SESSION["usuario"];
+        $sql = "SELECT * FROM usuario WHERE nombre_de_usuario = '$usuario'";
+        $resultado = $this->database->query($sql);
+        $_SESSION['perfil'] = $resultado;
+        return $resultado;
+    }
 }
