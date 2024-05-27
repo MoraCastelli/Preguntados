@@ -60,7 +60,7 @@ class Configuration
     private static function getPresenter()
     {
 
-        return new MustachePresenter("src/view/template");
+        return new MustachePresenter("view/template");
     }
     private static function getConfig()
     {

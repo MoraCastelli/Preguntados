@@ -17,7 +17,7 @@ class AdminController
     public function get()
     {
 
-        $this->presenter->render("src/View/Home.mustache");
+        $this->presenter->render("View/Home.mustache");
     }
 
 

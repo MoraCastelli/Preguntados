@@ -14,7 +14,7 @@ class RegistroController
 
     public function get()
     {
-        $this->presenter->render("src/view/register_form.mustache");
+        $this->presenter->render("view/register_form.mustache");
     }
 
     public function insertar()

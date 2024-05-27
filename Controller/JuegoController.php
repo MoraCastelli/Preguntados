@@ -12,6 +12,6 @@ class JuegoController
     }
 
     public function get(){
-        $this->presenter->render("src/View/lobby.mustache");
+        $this->presenter->render("View/lobby.mustache");
     }
 }

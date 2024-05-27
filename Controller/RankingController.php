@@ -16,7 +16,7 @@ class RankingController
 
     public function get()
     {
-        $this->presenter->render("src/view/Ranking.mustache");
+        $this->presenter->render("view/Ranking.mustache");
 
     }
 }
