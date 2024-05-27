@@ -1,0 +1,38 @@
+
+
+
+<body>
+<div class="container">
+    {{#usuario}}
+    <h2>Bienvenido, {{usuario}}!</h2>
+    <a href=""><button>VerPerfil</button></a>
+
+    <a href="index.php?controller=Login&action=logout">Cerrar Sesión</a>
+
+    </form>
+    {{/usuario}}
+    {{^usuario}}
+    <form class="login-form" action="index.php?controller=Login&action=get" method="post">
+        <h2>Login</h2>
+        Usuario: <input type="text" name="usuario" id="usuario">
+        Password: <input type="password" name="password" id="password"><br><br>
+        <input type="submit" value="Login">
+        <a class="register-link" href="index.php?controller=Registro&action=get">Registrarse</a>
+    </form>
+    {{/usuario}}
+
+    {{#error}}
+    <div class="errors">
+      {{error}}
+    </div>
+    {{/error}}
+</div>
+
+<main>
+
+    <a href="index.php?controller=Juego&action=get"><button>Jugar</button></a>
+    <a href="index.php?controller=Edicion&action=get"><button>CrearPreguntas</button></a>
+    <a href="index.php?controller=Ranking&action=get"><button>Ver Ranking</button></a>
+
+</main>
+</body>

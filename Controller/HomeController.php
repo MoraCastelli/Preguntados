@@ -1,5 +1,6 @@
 <?php
 
+
 class HomeController
 {
     private $presenter;
@@ -13,21 +14,24 @@ class HomeController
 
     public function get()
     {
-        // $templateData = $this->contextoParaPasarALaVista();
-        $this->presenter->render("src/view/login_form.mustache");
+         $templateData = $this->contextoParaPasarALaVista();
+        $this->presenter->render("src/View/Home.mustache",$templateData);
     }
 
 
-   private function contextoParaPasarALaVista(): array
+    private function contextoParaPasarALaVista(): array
     {
         $usuario = $_SESSION['usuario'] ?? null;
         $error = $_SESSION["error_login"] ?? null;
-
+var_dump($usuario);
         $templateData = [
-
-            "usuario" => $usuario,
             "error" => $error
         ];
-    return $templateData;
-}
+
+        if ($usuario !== null) {
+            $templateData["usuario"] = $usuario;
+        }
+
+        return $templateData;
+    }
 }

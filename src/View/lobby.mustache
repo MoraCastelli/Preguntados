@@ -1,12 +1,11 @@
-{{> header }}
+
 <h1>Bienvenido, {{user.full_name}}</h1>
 <p>Tu puntaje: {{user.score}}</p>
 <button onclick="location.href='create_game.php'">Crear nuevo juego</button>
-<button onclick="location.href='ranking.php'">Ver Ranking</button>
+
 <h2>Tus partidas:</h2>
 <ul>
     {{#games}}
         <li>ID del juego: {{id}} - Puntaje: {{score}}</li>
     {{/games}}
 </ul>
-{{> footer }}

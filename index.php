@@ -1,12 +1,11 @@
 <?php
+include_once ("Configuration.php");
+
 
 session_start();
 
-include_once('Configuration.php');
-$configuration = new Configuration();
-$router = $configuration->getRouter();
+$controller = $_GET['controller'] ?? '';
+$action = $_GET['action'] ?? 'get';
 
-$module = isset($_GET['module']) ? $_GET['module'] : 'login';
-$method = isset($_GET['action']) ? $_GET['action'] : 'list';
-
-$router->route($module, $method);
+$router =Configuration::getRouter();
+$router->route($controller,$action);

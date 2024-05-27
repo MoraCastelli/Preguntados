@@ -1,4 +1,6 @@
 <?php
+
+
 class LoginController
 {
     private $presenter;
@@ -13,7 +15,12 @@ class LoginController
 
     public function get()
     {
-        if (isset($_POST["usuario"]) && isset($_POST["password"])) {
+
+
+
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["usuario"]) && isset($_POST["password"])) {
             $usuario = $_POST["usuario"];
             $password = $_POST["password"];
 
@@ -29,22 +36,23 @@ class LoginController
             $_SESSION["error_login"] = "Por favor, ingresa tus credenciales.";
         }
 
-        $this->redirect();
+        // Redirigir a la página principal del Pokedex
+        header("Location:index.php?controller=Home&action=get");
+        exit();
     }
 
     public function logout()
     {
+
         session_destroy();
         session_unset();
+        header("Location:index.php?controller=Home&action=get");
 
-        $this->redirect();
-
-    }
-
-    private function redirect()
-    {
-        header("Location: index.php?controller=home&action=get");
         exit();
     }
+
+
+
+
 
 }

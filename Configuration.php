@@ -1,14 +1,20 @@
 <?php
 
-include_once ("src/Controller/RegistroController.php");
-include_once ("src/Controller/HomeController.php");
+
+include_once ("Controller/RegistroController.php");
+include_once ("Controller/HomeController.php");
+include_once ("Controller/LoginController.php");
+include_once ("Controller/JuegoController.php");
+include_once ("Controller/AdminController.php");
+include_once ("Controller/RankingController.php");
 
 include_once ("helper/Router.php");
 include_once ("helper/DataBase.php");
 include_once ("helper/MustachePresenter.php");
 include_once ("vendor/mustache/src/Mustache/Autoloader.php");
 
-include_once ('src/Model/UserModel.php');
+include_once ('Model/UserModel.php');
+include_once ('Model/GameModel.php');
 
 class Configuration
 {
@@ -18,9 +24,20 @@ class Configuration
     {
         return new RegistroController(self::getUserModel(), self::getPresenter());
     }
-
     public static function getHomeController(){
         return new HomeController(self::getUserModel(), self::getPresenter());
+    }
+    public static function getLoginController(){
+        return new LoginController(self::getUserModel(), self::getPresenter());
+    }
+    public static function getJuegoController(){
+        return new JuegoController(self::getGameModel(), self::getPresenter());
+    }
+    public static function getAdminController(){
+        return new AdminController(self::getUserModel(), self::getPresenter());
+    }
+    public static function getRankingController(){
+        return new RankingController(self::getUserModel(), self::getPresenter());
     }
 
     //model
@@ -28,12 +45,16 @@ class Configuration
     {
         return new UserModel(self::Database());
     }
+    public static function getGameModel()
+    {
+        return new GameModel(self::Database());
+    }
 
     //Helper
     public static function getRouter()
     {
         return new Router(
-            "getRegistroController", "get");
+            "getHomeController", "get");
     }
 
     private static function getPresenter()
