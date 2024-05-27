@@ -62,6 +62,9 @@ ALTER TABLE `usuario`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
+INSERT INTO `usuario` (`id`, `nombre`, `apellido`, `ano_de_nacimiento`, `sexo`, `mail`, `contrasena`, `nombre_de_usuario`, `foto_de_perfil`)
+VALUES (NULL, '', '', '0000', '', '', 'admin', 'admin', NULL)
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
