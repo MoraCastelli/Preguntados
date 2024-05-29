@@ -1,6 +1,5 @@
 <?php
 
-
 class RegistroController
 {
     private $presenter;
@@ -35,13 +34,22 @@ class RegistroController
                 move_uploaded_file($_FILES['foto_de_perfil']['tmp_name'], 'public/img' . $foto_de_perfil);
             }
 
+            $codigo_activacion = md5(uniqid(rand(), true));
 
-            $this->model->registrarUsuario($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $foto_de_perfil);
+            $this->model->enviarCorreoActivacion($mail, $nombre, $codigo_activacion);
+
+            $this->model->registrarUsuario($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $foto_de_perfil, $codigo_activacion);
+        
+           
         }
 
         header('Location:index.php?controller=home&action=get');
         exit();
+
+        
     }
+    
+
 }
 
 

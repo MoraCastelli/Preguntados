@@ -1,5 +1,8 @@
 <?php
 
+include_once ("vendor\mustache\PHPMailer\src\Exception.php");
+include_once ("vendor\mustache\PHPMailer\src\PHPMailer.php");
+include_once ("vendor\mustache\PHPMailer\src\SMTP.php");
 
 include_once ("Controller/RegistroController.php");
 include_once ("Controller/HomeController.php");
@@ -43,6 +46,10 @@ class Configuration
 
     public static function getVerPerfilController(){
         return new VerPerfilController(self::getUserModel(), self::getPresenter());
+    }
+
+    public static function getUsuarioPorCodigoActivacion(){
+        return new ActivacionController(self::getUserModel(), self::getPresenter());
     }
 
     //model
