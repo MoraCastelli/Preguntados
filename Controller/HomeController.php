@@ -23,7 +23,7 @@ class HomeController
     {
         $usuario = $_SESSION['usuario'] ?? null;
         $error = $_SESSION["error_login"] ?? null;
-var_dump($usuario);
+
         $templateData = [
             "error" => $error
         ];
