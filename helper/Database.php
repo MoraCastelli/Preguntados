@@ -23,9 +23,13 @@ class Database
         return mysqli_query($this->conn, $sql);
     }
 
+    public function getLastInsertId()
+    {
+        return $this->conn->insert_id;
+    }
+
     public function __destruct()
     {
         mysqli_close($this->conn);
     }
-
 }

@@ -49,7 +49,7 @@ class RegistroController
             }
 
 
-            $this->model->registrarUsuario($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $archivo_nombre);
+            $this->model->registrarJugador($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $archivo_nombre);
         }
 
         header('Location:index.php?controller=home&action=get');
