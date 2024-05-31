@@ -1,11 +1,21 @@
 
-<h1>Bienvenido, {{user.full_name}}</h1>
-<p>Tu puntaje: {{user.score}}</p>
-<button onclick="location.href='create_game.php'">Crear nuevo juego</button>
+<main>
+    <div>
+        <h2>{{nombreUsuario}}</h2>
+        <h3>{{categoria}}</h3>
+        <h3>{{pregunta}}</h3>
 
-<h2>Tus partidas:</h2>
-<ul>
-    {{#games}}
-        <li>ID del juego: {{id}} - Puntaje: {{score}}</li>
-    {{/games}}
-</ul>
+        <div >
+            {{#respuestas}}
+            <form method="post" action="index.php?controller=juego&action=verificarRespuesta">
+                <button name="esCorrecta" id="esCorrecta" value="{{#esCorrecta}}true{{/esCorrecta}}{{^esCorrecta}}false{{/esCorrecta}}">{{respuesta}}</button>
+            </form>
+            {{/respuestas}}
+        </div>
+
+        <div >
+            <h5>Puntaje: <span>{{puntaje}}</span></h5>
+        </div>
+    </div>
+</main>
+

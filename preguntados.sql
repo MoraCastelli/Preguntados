@@ -38,20 +38,20 @@ CREATE TABLE pregunta(
 	id int auto_increment primary key,
     pregunta varchar(150),
     categoría ENUM('Geografía', 'Ciencia', 'Historia', 'Deporte', 'Arte', 'Entretenimiento')
-);
-
-CREATE TABLE respuesta(
-	id int auto_increment primary key,
-    respuesta varchar(150),
-    es_la_correcta boolean,
-    pregunta int references pregunta(id)
-);
+);CREATE TABLE respuesta(
+                            id int auto_increment primary key,
+                            respuesta varchar(150),
+                            es_la_correcta boolean,
+                            pregunta int references pregunta(id)
+  );
 
 CREATE TABLE partida (
-	id int auto_increment primary key,
-    puntaje int,
-    jugador int references jugador(id)
+                         id int auto_increment primary key,
+                         puntaje int,
+                         jugador int references jugador(id)
 );
+
+
 
 CREATE TABLE partida_pregunta (
 	partida int,
