@@ -5,7 +5,7 @@
         <h3>{{categoria}}</h3>
         <h3>{{pregunta}}</h3>
 
-        <div >
+        <div id="respuestas">
             {{#respuestas}}
             <form method="post" action="index.php?controller=juego&action=verificarRespuesta">
                 <button name="esCorrecta" id="esCorrecta" value="{{#esCorrecta}}true{{/esCorrecta}}{{^esCorrecta}}false{{/esCorrecta}}">{{respuesta}}</button>
@@ -13,9 +13,57 @@
             {{/respuestas}}
         </div>
 
-        <div >
+        <div>
             <h5>Puntaje: <span>{{puntaje}}</span></h5>
         </div>
     </div>
+
+    <div>
+        <h5>Tiempo restante: <span id="timer">30</span> segundos</h5>
+    </div>
+
+    <form id="timeoutForm" method="post" action="index.php?controller=juego&action=verificarRespuesta">
+        <input type="hidden" name="esCorrecta" value="false">
+    </form>
+
+    <!-- Popup de Fin de Partida -->
+    <div id="finPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 1000;">
+        <h3>Partida finalizada</h3>
+        <p>Su puntuación es de: <span id="finalPuntaje">{{puntajeFinal}}</span></p>
+        <button id="homeButton">Aceptar</button>
+    </div>
+
+    <!-- Fondo Oscuro para el Popup -->
+    <div id="popupBackground" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 500;"></div>
 </main>
 
+<script>
+    // Temporizador de 30 segundos
+    let timeLeft = 30;
+    const timerElement = document.getElementById('timer');
+
+    const countdown = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            document.getElementById('timeoutForm').submit(); // Enviar automáticamente si el tiempo se agota
+        } else {
+            timerElement.innerText = timeLeft;
+            timeLeft -= 1;
+        }
+    }, 1000);
+</script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const finalizado = {{finalizado}};
+        if (finalizado) {
+            document.getElementById('finPopup').style.display = 'block';
+            document.getElementById('popupBackground').style.display = 'block';
+        }
+    });
+
+    // Redirigir al inicio al hacer clic en "Aceptar"
+    document.getElementById('homeButton').addEventListener('click', function() {
+        window.location.href = 'index.php';
+    });
+</script>

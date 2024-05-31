@@ -21,6 +21,8 @@ class JuegoController
         $respuestas = $preguntaData['respuestas'];
         $categoria = $preguntaData['categoria'];
         $puntaje = isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] : 0;
+        $finalizado = isset($_GET['finalizado']) ? $_GET['finalizado'] == 'true' : false;
+        
 
         // Datos a pasar a la vista
         $data = [
@@ -28,7 +30,9 @@ class JuegoController
             'pregunta' => $pregunta,
             'respuestas' => $respuestas,
             'categoria' => $categoria,
-            'puntaje' => $puntaje
+            'puntaje' => $puntaje,
+            'finalizado' => $finalizado,
+            'puntajeFinal' => $finalizado ? $puntaje : null
         ];
 
 
@@ -45,7 +49,11 @@ class JuegoController
             exit;
         } else {
 
-            header('Location: index.php');
+            $puntaje = isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] : 0;
+            // Reiniciar el puntaje
+
+            // Pasar el puntaje actual en la URL al redirigir al usuario
+            header("Location: index.php?controller=Juego&action=get&finalizado=true&puntaje={$puntaje}");
             exit;
         }
     }
