@@ -24,7 +24,7 @@
 
         <div id="respuestas">
             {{#respuestas}}
-            <form method="post" action="index.php?controller=juego&action=verificarRespuesta">
+            <form method="post" action="index.php?controller=juego&action=verificarRespuesta"id="timeoutForm">
                 <input type="hidden" name="pregunta_id" value="{{pregunta_id}}">
                 <button name="es_la_correcta" id="es_la_correcta" value="{{#es_la_correcta}}true{{/es_la_correcta}}{{^es_la_correcta}}false{{/es_la_correcta}}">{{respuesta}}</button>
             </form>
@@ -39,9 +39,6 @@
         <h5>Tiempo restante: <span id="timer">30</span> segundos</h5>
     </div>
 
-    <form id="timeoutForm" method="post" action="index.php?controller=juego&action=verificarRespuesta">
-        <input type="hidden" name="esCorrecta" value="false">
-    </form>
 
 
     {{/finalizado}}

@@ -21,7 +21,6 @@ public function obtenerPreguntaYRespuestas()
     $pregunta = $preguntas[0];
     $preguntaId = (int) $pregunta['id'];
 
-
     $queryRespuestas = "SELECT respuesta, es_la_correcta FROM respuesta WHERE pregunta = $preguntaId";
     $respuestas = $this->database->query($queryRespuestas);
 
