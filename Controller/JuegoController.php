@@ -39,7 +39,7 @@ class JuegoController
 
     public function verificarRespuesta() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $esCorrecta = $_POST['esCorrecta'] === 'true';
+        $esCorrecta = $_POST['es_la_correcta'] === 'true';
         if ($esCorrecta) {
             $_SESSION['puntaje'] = isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] + 1 : 1;
             header('Location: index.php?controller=Juego&action=get');
