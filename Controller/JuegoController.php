@@ -9,12 +9,17 @@ class JuegoController
     {
         $this->model = $Model;
         $this->presenter = $Presenter;
+
+
     }
+
+
 
     public function get()
     {
 
-        $nombreUsuario = isset($_SESSION['nombre_usuario']);
+        $this->checkLoggedIn();
+        $nombreUsuario =$_SESSION['usuario'];
         $preguntaData = $this->model->obtenerPreguntaYRespuestas();
         $pregunta = $preguntaData['pregunta'];
         $respuestas = $preguntaData['respuestas'];
@@ -23,7 +28,7 @@ class JuegoController
         $finalizado = isset($_GET['finalizado']) ? $_GET['finalizado'] == 'true' : false;
         $puntajeFinal = isset($_SESSION['puntaje_final']) ? $_SESSION['puntaje_final'] : null;
 
-        // Datos a pasar a la vista
+
         $data = [
             'nombreUsuario' => $nombreUsuario,
             'pregunta' => $pregunta,
@@ -40,18 +45,31 @@ class JuegoController
     public function verificarRespuesta() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $esCorrecta = $_POST['es_la_correcta'] === 'true';
+
         if ($esCorrecta) {
             $_SESSION['puntaje'] = isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] + 1 : 1;
             header('Location: index.php?controller=Juego&action=get');
             exit;
         } else {
-
             $puntaje = isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] : 0;
-            $_SESSION['puntaje_final'] = $puntaje; // Guardar el puntaje final en la sesión
-            $_SESSION['puntaje'] = 0; // Restablecer el puntaje normal a 0
+            $_SESSION['puntaje_final'] = $puntaje;
+            $_SESSION['puntaje'] = 0;
             header("Location: index.php?controller=Juego&action=get&finalizado=true");
             exit;
         }
     }
 }
+
+    private function checkLoggedIn()
+    {
+        if (!isset($_SESSION['usuario'])) {
+            header('Location: index.php');
+            exit();
+        }
+    }
+
+
+
+
+
 }
