@@ -30,6 +30,7 @@ public function obtenerPreguntaYRespuestas()
 
 
     $resultado = [
+        'pregunta_id' => $preguntaId,
         'pregunta' => $pregunta['pregunta'],
         'respuestas' => $respuestas,
         'categoria' => $pregunta['categoría']
@@ -39,10 +40,10 @@ public function obtenerPreguntaYRespuestas()
 }
 
 
-    public function guardarPartida($usuario, $puntajeFinal, $preguntasRespuestas)
+    public function guardarPartida($usuario, $puntajeFinal,$preguntasRespuestas)
     {
-    //falta completar para guardar partida
 
+        //falta mi query
     }
 
 

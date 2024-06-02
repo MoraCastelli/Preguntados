@@ -28,6 +28,12 @@ class JuegoController
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $esCorrecta = $_POST['es_la_correcta'] === 'true';
 
+        $_SESSION['preguntas_respuestas'][] = [
+            'pregunta_id' => $_POST['pregunta_id'],
+            'se_respondio_bien' => $esCorrecta
+        ];
+
+
         if ($esCorrecta) {
             $this->continuaJungando();
         } else {
@@ -37,12 +43,13 @@ class JuegoController
     }
 }
 
-    public function resetGame()
+    public function iniciarPartida()
     {
         // Limpiar todas las variables de sesión relacionadas con el juego
         unset($_SESSION['pagina_cargada']);
         unset($_SESSION['puntaje']);
         unset($_SESSION['puntaje_final']);
+        unset($_SESSION['preguntas_respuestas']);
         header("Location: index.php?controller=Juego&action=get");
         exit();
     }
@@ -88,15 +95,17 @@ class JuegoController
         $nombreUsuario = $_SESSION['usuario'];
         $preguntaData = $this->model->obtenerPreguntaYRespuestas();
         $pregunta = $preguntaData['pregunta'];
+        $preguntaId = $preguntaData['pregunta_id'];
         $respuestas = $preguntaData['respuestas'];
         $categoria = $preguntaData['categoria'];
-        $puntaje = isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] : 0;
-        $finalizado = isset($_GET['finalizado']) ? $_GET['finalizado'] == 'true' : false;
-        $puntajeFinal = isset($_SESSION['puntaje_final']) ? $_SESSION['puntaje_final'] : null;
+        $puntaje = $_SESSION['puntaje'] ?? 0;
+        $finalizado = isset($_GET['finalizado']) && $_GET['finalizado'] == 'true';
+        $puntajeFinal = $_SESSION['puntaje_final'] ?? null;
 
         $data = [
             'nombreUsuario' => $nombreUsuario,
             'pregunta' => $pregunta,
+            'pregunta_id' => $preguntaId,
             'respuestas' => $respuestas,
             'categoria' => $categoria,
             'puntaje' => $puntaje,
@@ -110,9 +119,7 @@ class JuegoController
     {
         if ($data['finalizado']) {
             $this->guardarPartida($data['nombreUsuario'], $data['puntajeFinal']);
-            unset($_SESSION['pagina_cargada']);
-            unset($_SESSION['puntaje']);
-            unset($_SESSION['puntaje_final']);
+
         }
     }
 
@@ -121,11 +128,10 @@ class JuegoController
         if (isset($_SESSION['preguntas_respuestas'])) {
             $preguntasRespuestas = $_SESSION['preguntas_respuestas'];
             $this->model->guardarPartida($usuario, $puntajeFinal, $preguntasRespuestas);
-            unset($_SESSION['preguntas_respuestas']);
+
         }
+
+
     }
-
-
-
 
 }

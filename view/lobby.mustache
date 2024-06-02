@@ -16,7 +16,7 @@
         {{^finalizado}}
         <h2>{{nombreUsuario}}</h2>
 
-
+        <h3>{{pregunta_id}}</h3>
         <h3>{{categoria}}</h3>
 
 
@@ -25,6 +25,7 @@
         <div id="respuestas">
             {{#respuestas}}
             <form method="post" action="index.php?controller=juego&action=verificarRespuesta">
+                <input type="hidden" name="pregunta_id" value="{{pregunta_id}}">
                 <button name="es_la_correcta" id="es_la_correcta" value="{{#es_la_correcta}}true{{/es_la_correcta}}{{^es_la_correcta}}false{{/es_la_correcta}}">{{respuesta}}</button>
             </form>
             {{/respuestas}}

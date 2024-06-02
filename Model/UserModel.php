@@ -31,10 +31,18 @@ class UserModel
 
         $result = $this->database->execute($sql);
 
-        // Si se encuentra un resultado, es válido
-        return $result->num_rows == 1 && $this->emailVerificado();
-    }
+        if ($result->num_rows == 1 && $this->emailVerificado()) {
+            $usuario = $result->fetch_assoc();
 
+            $_SESSION["usuario"] = $usuario["nombre_de_usuario"];
+            $_SESSION['id_usuario'] = $usuario['id_usuario'];
+
+            return true;
+        }
+        else {
+            return false;
+    }
+    }
     private function emailVerificado()
     {
         //falta agregar lo del mail
