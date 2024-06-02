@@ -118,16 +118,17 @@ class JuegoController
     public function guardarPartidaSiTermino(array $data)
     {
         if ($data['finalizado']) {
-            $this->guardarPartida($data['nombreUsuario'], $data['puntajeFinal']);
+            $this->guardarPartida($data['puntajeFinal']);
 
         }
     }
 
-    private function guardarPartida($usuario, $puntajeFinal)
+    private function guardarPartida( $puntajeFinal)
     {
         if (isset($_SESSION['preguntas_respuestas'])) {
             $preguntasRespuestas = $_SESSION['preguntas_respuestas'];
-            $this->model->guardarPartida($usuario, $puntajeFinal, $preguntasRespuestas);
+            $idUsuario= $_SESSION['id_usuario'];
+            $this->model->guardarPartida($idUsuario, $puntajeFinal, $preguntasRespuestas);
 
         }
 

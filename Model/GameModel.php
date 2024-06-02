@@ -25,9 +25,7 @@ public function obtenerPreguntaYRespuestas()
     $queryRespuestas = "SELECT respuesta, es_la_correcta FROM respuesta WHERE pregunta = $preguntaId";
     $respuestas = $this->database->query($queryRespuestas);
 
-    // Mezclar las respuestas
     shuffle($respuestas);
-
 
     $resultado = [
         'pregunta_id' => $preguntaId,
@@ -40,13 +38,35 @@ public function obtenerPreguntaYRespuestas()
 }
 
 
-    public function guardarPartida($usuario, $puntajeFinal,$preguntasRespuestas)
+    public function guardarPartida($idUsuario, $puntajeFinal,$preguntasRespuestas)
     {
 
-        //falta mi query
-    }
+
+
+        try {
+            // Insertar información de la partida en la tabla 'partida'
+            $queryInsertPartida = "INSERT INTO partida (puntaje, jugador) VALUES ('$puntajeFinal', '$idUsuario')";
+            $this->database->execute($queryInsertPartida);
+
+            // Obtener el ID de la partida recién insertada
+            $partidaId = $this->database->getLastInsertId();
+
+            // Insertar información de las preguntas respondidas en la tabla 'partida_pregunta'
+            foreach ($preguntasRespuestas as $preguntaRespuesta) {
+                $preguntaId = $preguntaRespuesta['pregunta_id'];
+                $seRespondioBien = $preguntaRespuesta['se_respondio_bien'];
+
+                $queryInsertPartidaPregunta = "INSERT INTO partida_pregunta (partida, pregunta, se_respondio_bien) VALUES ('$partidaId', '$preguntaId', '$seRespondioBien')";
+                $this->database->execute($queryInsertPartidaPregunta);
+            }
+        } catch (Exception $e) {
+            // Manejar el error como desees
+            echo "Error al guardar la partida: " . $e->getMessage();
+        }
 
 
 
 
+
+}
 }
