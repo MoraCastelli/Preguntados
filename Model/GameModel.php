@@ -13,25 +13,22 @@ class GameModel
 
 
 public function obtenerPreguntaYRespuestas()
-{// Obtener una pregunta al azar
+{
+    //falta agregar q no se repitan preguntas y que te de una de tu misma dificultad
     $queryPregunta = 'SELECT id, pregunta, categoría FROM pregunta ORDER BY RAND() LIMIT 1';
     $preguntas = $this->database->query($queryPregunta);
-
-
 
     $pregunta = $preguntas[0];
     $preguntaId = (int) $pregunta['id'];
 
-    // Obtener las respuestas de la pregunta seleccionada
+
     $queryRespuestas = "SELECT respuesta, es_la_correcta FROM respuesta WHERE pregunta = $preguntaId";
     $respuestas = $this->database->query($queryRespuestas);
-
-
 
     // Mezclar las respuestas
     shuffle($respuestas);
 
-    // Construir el resultado final
+
     $resultado = [
         'pregunta' => $pregunta['pregunta'],
         'respuestas' => $respuestas,
@@ -42,7 +39,11 @@ public function obtenerPreguntaYRespuestas()
 }
 
 
+    public function guardarPartida($usuario, $puntajeFinal, $preguntasRespuestas)
+    {
+    //falta completar para guardar partida
 
+    }
 
 
 
