@@ -26,7 +26,8 @@ class JuegoController
 
     public function verificarRespuesta() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $esCorrecta = $_POST['es_la_correcta'] === 'true';
+        $respuestaId = $_POST['respuesta_id'];
+        $esCorrecta = $this->model->esRespuestaCorrecta($_POST['pregunta_id'],$respuestaId);
 
         $_SESSION['preguntas_respuestas'][] = [
             'pregunta_id' => $_POST['pregunta_id'],
@@ -101,6 +102,8 @@ class JuegoController
         $puntaje = $_SESSION['puntaje'] ?? 0;
         $finalizado = isset($_GET['finalizado']) && $_GET['finalizado'] == 'true';
         $puntajeFinal = $_SESSION['puntaje_final'] ?? null;
+
+
 
         $data = [
             'nombreUsuario' => $nombreUsuario,

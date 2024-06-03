@@ -10,18 +10,18 @@ class GameModel
     {
         $this->database = $database;
     }
-
+    //falta agregar q no se repitan preguntas y que te de una de tu misma dificultad
 
 public function obtenerPreguntaYRespuestas()
 {
-    //falta agregar q no se repitan preguntas y que te de una de tu misma dificultad
+
     $queryPregunta = 'SELECT id, pregunta, categoría FROM pregunta ORDER BY RAND() LIMIT 1';
     $preguntas = $this->database->query($queryPregunta);
 
     $pregunta = $preguntas[0];
     $preguntaId = (int) $pregunta['id'];
 
-    $queryRespuestas = "SELECT respuesta, es_la_correcta FROM respuesta WHERE pregunta = $preguntaId";
+    $queryRespuestas = "SELECT respuesta, es_la_correcta,id FROM respuesta WHERE pregunta = $preguntaId";
     $respuestas = $this->database->query($queryRespuestas);
 
     shuffle($respuestas);
@@ -41,16 +41,15 @@ public function obtenerPreguntaYRespuestas()
     {
 
 
-
         try {
-            // Insertar información de la partida en la tabla 'partida'
+
             $queryInsertPartida = "INSERT INTO partida (puntaje, jugador) VALUES ('$puntajeFinal', '$idUsuario')";
             $this->database->execute($queryInsertPartida);
 
-            // Obtener el ID de la partida recién insertada
+
             $partidaId = $this->database->getLastInsertId();
 
-            // Insertar información de las preguntas respondidas en la tabla 'partida_pregunta'
+
             foreach ($preguntasRespuestas as $preguntaRespuesta) {
                 $preguntaId = $preguntaRespuesta['pregunta_id'];
                 $seRespondioBien = $preguntaRespuesta['se_respondio_bien'];
@@ -59,12 +58,21 @@ public function obtenerPreguntaYRespuestas()
                 $this->database->execute($queryInsertPartidaPregunta);
             }
         } catch (Exception $e) {
-            // Manejar el error como desees
+
             echo "Error al guardar la partida: " . $e->getMessage();
         }
 
+    }
+        public function esRespuestaCorrecta($preguntaId,$respuestaId) {
+            $query = "SELECT es_la_correcta FROM respuesta WHERE id = '$respuestaId' AND pregunta = '$preguntaId'";
+            $result = $this->database->execute($query);
 
-
+            if ($result && $result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                return (bool) $row['es_la_correcta']; 
+            } else {
+                return false;
+            }
 
 
 }
