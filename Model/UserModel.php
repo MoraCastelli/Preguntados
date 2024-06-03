@@ -9,20 +9,20 @@ class UserModel
     }
 
     public function registrarJugador($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $foto_de_perfil)
-{
-    // Inserta en usuario
-    $sql = "INSERT INTO usuario (contrasena, nombre_de_usuario) 
+    {
+        // Inserta en usuario
+        $sql = "INSERT INTO usuario (contrasena, nombre_de_usuario) 
             VALUES ('$contrasena', '$nombre_de_usuario')";
-    $this->database->execute($sql);
+        $this->database->execute($sql);
 
-    // Obtén el ID del usuario recién insertado
-    $idJugador = $this->database->getLastInsertId();
+        // Obtén el ID del usuario recién insertado
+        $idJugador = $this->database->getLastInsertId();
 
-    // Inserta en jugador
-    $sqlJugador = "INSERT INTO jugador (id, nombre, apellido, ano_de_nacimiento, sexo, mail, foto_de_perfil, pais, ciudad, cuenta_verificada, hash_activacion)
+        // Inserta en jugador
+        $sqlJugador = "INSERT INTO jugador (id, nombre, apellido, ano_de_nacimiento, sexo, mail, foto_de_perfil, pais, ciudad, cuenta_verificada, hash_activacion)
                    VALUES ('$idJugador', '$nombre', '$apellido', '$ano_de_nacimiento', '$sexo', '$mail', '$foto_de_perfil', '...', '..', FALSE, '..')";
-    $this->database->execute($sqlJugador);
-}
+        $this->database->execute($sqlJugador);
+    }
 
     public function LogInconsulta($usuario, $password)
     {
@@ -38,10 +38,9 @@ class UserModel
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
 
             return true;
-        }
-        else {
+        } else {
             return false;
-    }
+        }
     }
     private function emailVerificado()
     {
@@ -52,7 +51,9 @@ class UserModel
     public function verPerfil()
     {
         $usuario = $_SESSION["usuario"];
-        $sql = "SELECT * FROM usuario WHERE nombre_de_usuario = '$usuario'";
+        $sql = "SELECT * FROM usuario u 
+                JOIN jugador j ON u.id = j.id
+                WHERE nombre_de_usuario = '$usuario'";
         $resultado = $this->database->query($sql);
         $_SESSION['perfil'] = $resultado;
         return $resultado;
