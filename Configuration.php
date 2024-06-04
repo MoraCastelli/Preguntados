@@ -11,6 +11,7 @@ include_once ("Controller/JuegoController.php");
 include_once ("Controller/AdminController.php");
 include_once ("Controller/RankingController.php");
 include_once ("Controller/VerPerfilController.php");
+include_once ("Controller/ActivacionController.php");
 
 include_once ("helper/Router.php");
 include_once ("helper/DataBase.php");
@@ -42,6 +43,10 @@ class Configuration
     }
     public static function getRankingController(){
         return new RankingController(self::getUserModel(), self::getPresenter());
+    }
+
+    public static function getActivacionController(){
+        return new ActivacionController(self::getUserModel(), self::getPresenter());
     }
 
     public static function getVerPerfilController(){

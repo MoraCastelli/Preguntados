@@ -46,7 +46,20 @@ class LoginController
     }
 
 
+    public function activar(){
+        if (isset($_GET['codigo'])) {
+            $codigo = $_GET['codigo'];
 
+            // Verificar el código de activación
+            if ($this->model->emailVerificado($codigo)) {
+                header('Location:index.php?controller=home&action=get');
+            } else {
+                // Redireccionar o mostrar mensaje de error
+            }
+        } else {
+            // Redireccionar o mostrar mensaje de error
+        }
+    }
 
 
 }

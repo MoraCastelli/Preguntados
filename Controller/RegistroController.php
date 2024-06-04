@@ -42,20 +42,15 @@ class RegistroController
                 //      $ruta_destino = $directorio_destino . $_FILES['fotoPokemon']['name'];
             }
 
-            $codigo_activacion = md5(uniqid(rand(), true));
+            $hash_activacion = md5(uniqid(rand(), true));
 
-            $this->model->enviarCorreoActivacion($mail, $nombre, $codigo_activacion);
-
-            $this->model->registrarUsuario($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $codigo_activacion);
-        
-           
+            $this->model->enviarCorreoActivacion($mail, $nombre, $hash_activacion);
 
             if (!empty($foto_de_perfil)) {
                 move_uploaded_file($_FILES['foto_de_perfil']['tmp_name'], 'public/img/fotoPerfil/' . $archivo_nombre);
             }
-
-
-            $this->model->registrarJugador($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $archivo_nombre);
+            
+            $this->model->registrarJugador($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $foto_de_perfil, $hash_activacion);
         }
 
         header('Location:index.php?controller=home&action=get');
