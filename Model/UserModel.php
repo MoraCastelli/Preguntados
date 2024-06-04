@@ -10,17 +10,16 @@ class UserModel
 
     public function registrarJugador($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $foto_de_perfil)
     {
-        // Inserta en usuario
-        $sql = "INSERT INTO usuario (contrasena, nombre_de_usuario) 
-            VALUES ('$contrasena', '$nombre_de_usuario')";
+        // Inserta en jugador
+        $sql = "INSERT INTO usuario (nombre_de_usuario, contrasena, nombre, apellido, ano_de_nacimiento, sexo, mail, foto_de_perfil, pais, ciudad, cuenta_verificada, hash_activacion)
+                   VALUES ('$nombre_de_usuario', '$contrasena', '$nombre', '$apellido', '$ano_de_nacimiento', '$sexo', '$mail', '$foto_de_perfil', '...', '..', FALSE, '..')";
+        
         $this->database->execute($sql);
 
-        // Obtén el ID del usuario recién insertado
+        // Obtén el ID del usuario recién insertado e insertarlo en jugador
         $idJugador = $this->database->getLastInsertId();
+        $sqlJugador = "INSERT INTO jugador (id) VALUES ($idJugador)";
 
-        // Inserta en jugador
-        $sqlJugador = "INSERT INTO jugador (id, nombre, apellido, ano_de_nacimiento, sexo, mail, foto_de_perfil, pais, ciudad, cuenta_verificada, hash_activacion)
-                   VALUES ('$idJugador', '$nombre', '$apellido', '$ano_de_nacimiento', '$sexo', '$mail', '$foto_de_perfil', '...', '..', FALSE, '..')";
         $this->database->execute($sqlJugador);
     }
 
@@ -51,9 +50,7 @@ class UserModel
     public function verPerfil()
     {
         $usuario = $_SESSION["usuario"];
-        $sql = "SELECT * FROM usuario u 
-                JOIN jugador j ON u.id = j.id
-                WHERE nombre_de_usuario = '$usuario'";
+        $sql = "SELECT * FROM usuario WHERE nombre_de_usuario = '$usuario'";
         $resultado = $this->database->query($sql);
         $_SESSION['perfil'] = $resultado;
         return $resultado;

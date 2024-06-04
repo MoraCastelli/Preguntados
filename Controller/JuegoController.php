@@ -9,13 +9,10 @@ class JuegoController
     {
         $this->model = $Model;
         $this->presenter = $Presenter;
-
-
     }
 
     public function get()
     {
-
         $this->checkLoggedIn();
         $this->filtroAntiF5();
         $data = $this->obtenerDataParaPartida();
@@ -24,25 +21,26 @@ class JuegoController
         $this->presenter->render("View/lobby.mustache", $data);
     }
 
-    public function verificarRespuesta() {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $respuestaId = $_POST['respuesta_id'];
-        $esCorrecta = $this->model->esRespuestaCorrecta($_POST['pregunta_id'],$respuestaId);
+    public function verificarRespuesta()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $respuestaId = $_POST['respuesta_id'];
+            $esCorrecta = $this->model->esRespuestaCorrecta($_POST['pregunta_id'], $respuestaId);
 
-        $_SESSION['preguntas_respuestas'][] = [
-            'pregunta_id' => $_POST['pregunta_id'],
-            'se_respondio_bien' => $esCorrecta
-        ];
+            $_SESSION['preguntas_respuestas'][] = [
+                'pregunta_id' => $_POST['pregunta_id'],
+                'se_respondio_bien' => $esCorrecta
+            ];
 
 
-        if ($esCorrecta) {
-            $this->continuaJungando();
-        } else {
-            $this->gameOver();
-            exit;
+            if ($esCorrecta) {
+                $this->continuaJugando();
+            } else {
+                $this->gameOver();
+                exit;
+            }
         }
     }
-}
 
     public function iniciarPartida()
     {
@@ -55,7 +53,7 @@ class JuegoController
         exit();
     }
 
-  private function checkLoggedIn()
+    private function checkLoggedIn()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: index.php');
@@ -63,7 +61,8 @@ class JuegoController
         }
     }
 
-    private function gameOver() {
+    private function gameOver()
+    {
         $puntaje = $_SESSION['puntaje'] ?? 0;
         $_SESSION['puntaje_final'] = $puntaje;
         $_SESSION['puntaje'] = 0;
@@ -72,7 +71,7 @@ class JuegoController
         exit;
     }
 
-    private function continuaJungando()
+    private function continuaJugando()
     {
         $_SESSION['puntaje'] = isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] + 1 : 1;
         unset($_SESSION['pagina_cargada']);
@@ -82,12 +81,10 @@ class JuegoController
 
     private function filtroAntiF5()
     {
-
         if (isset($_SESSION['pagina_cargada']) && !isset($_GET['finalizado'])) {
             $this->gameOver();
             exit;
         }
-
     }
 
     private function obtenerDataParaPartida(): array
@@ -126,16 +123,12 @@ class JuegoController
         }
     }
 
-    private function guardarPartida( $puntajeFinal)
+    private function guardarPartida($puntajeFinal)
     {
         if (isset($_SESSION['preguntas_respuestas'])) {
             $preguntasRespuestas = $_SESSION['preguntas_respuestas'];
-            $idUsuario= $_SESSION['id_usuario'];
+            $idUsuario = $_SESSION['id_usuario'];
             $this->model->guardarPartida($idUsuario, $puntajeFinal, $preguntasRespuestas);
-
         }
-
-
     }
-
 }
