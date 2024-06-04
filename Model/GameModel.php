@@ -25,7 +25,7 @@ class GameModel
         $preguntaId = (int) $pregunta['id'];
 
 
-        $respuestas = $this->queryRespuestas($preguntas);
+        $respuestas = $this->queryRespuestas($preguntaId);
         $resultado = [
             'pregunta_id' => $preguntaId,
             'pregunta' => $pregunta['pregunta'],
@@ -114,12 +114,10 @@ class GameModel
         return $respuestas;
     }
 
-    /**
-     * @param $idUsuario
-     * @return mixed
-     */
+
     public function queryPregunta($idUsuario)
     {
+        $idUsuario=(int)$idUsuario;
         $queryPregunta = "
             SELECT p.id, p.pregunta, p.categoría 
             FROM pregunta p
