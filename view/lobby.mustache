@@ -19,11 +19,11 @@
             <img src="/public/img/fotoPerfil/{{foto_de_perfil}}" class="w3-circle w3-border w3-margin" style="width: 5rem"/>
             <h2 class="w3-center w3-pink">{{nombreUsuario}}</h2>
 
-            <h3 class="w3-center">{{categoria}}</h3>
+            <h3 class="w3-center {{categoria_estilo}}">{{categoria}}</h3>
 
-        <h3 class="w3-center {{categoria_estilo}}">{{pregunta}}</h3>
+        <h3 class="w3-center w3-pink>"> {{pregunta}} </h3>
 
-        <div id="respuestas">
+        <div id="respuestas" >
             {{#respuestas}}
             <form method="post" action="index.php?controller=juego&action=verificarRespuesta" id="timeoutForm" class="w3-center">
                 <input type="hidden" name="pregunta_id" value="{{pregunta_id}}">
