@@ -34,30 +34,40 @@ class GameModel
     }
 
 
-    public function guardarPartida($idUsuario, $puntajeFinal, $preguntasRespuestas)
+    public function crearPartida($idUsuario)
     {
         try {
-
-            $queryInsertPartida = "INSERT INTO partida (puntaje, jugador) VALUES ('$puntajeFinal', '$idUsuario')";
+            $queryInsertPartida = "INSERT INTO partida (puntaje, jugador) VALUES (0, '$idUsuario')";
             $this->database->execute($queryInsertPartida);
-
-
             $partidaId = $this->database->getLastInsertId();
-
-
-            foreach ($preguntasRespuestas as $preguntaRespuesta) {
-                $preguntaId = $preguntaRespuesta['pregunta_id'];
-                $seRespondioBien = $preguntaRespuesta['se_respondio_bien'];
-
-                $queryInsertPartidaPregunta = "INSERT INTO partida_pregunta (partida, pregunta, se_respondio_bien) VALUES ('$partidaId', '$preguntaId', '$seRespondioBien')";
-                $this->database->execute($queryInsertPartidaPregunta);
-            }
+            return $partidaId;
         } catch (Exception $e) {
-
-            echo "Error al guardar la partida: " . $e->getMessage();
+            echo "Error al crear la partida: " . $e->getMessage();
+            return null;
         }
-
     }
+
+    public function guardarRespuestaEnPartida($idPartida, $preguntaId, $esCorrecta)
+    {
+        try {
+            $queryInsertPartidaPregunta = "INSERT INTO partida_pregunta (partida, pregunta, se_respondio_bien) VALUES ('$idPartida', '$preguntaId', '$esCorrecta')";
+            $this->database->execute($queryInsertPartidaPregunta);
+        } catch (Exception $e) {
+            echo "Error al guardar la respuesta: " . $e->getMessage();
+        }
+    }
+
+
+    public function actualizarPuntajeFinal($idPartida, $puntajeFinal)
+    {
+        try {
+            $queryUpdatePartida = "UPDATE partida SET puntaje = '$puntajeFinal' WHERE id = '$idPartida'";
+            $this->database->execute($queryUpdatePartida);
+        } catch (Exception $e) {
+            echo "Error al actualizar el puntaje final: " . $e->getMessage();
+        }
+    }
+
     public function esRespuestaCorrecta($preguntaId, $respuestaId)
     {
         $query = "SELECT es_la_correcta FROM respuesta WHERE id = '$respuestaId' AND pregunta = '$preguntaId'";

@@ -16,7 +16,7 @@ class JuegoController
         $this->checkLoggedIn();
         $this->filtroAntiF5();
         $data = $this->obtenerDataParaPartida();
-        $this->guardarPartidaSiTermino($data);
+        $this->guardarPuntajeSiTermino($data);
 
         $this->presenter->render("View/lobby.mustache", $data);
     }
@@ -25,12 +25,14 @@ class JuegoController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $respuestaId = $_POST['respuesta_id'];
-            $esCorrecta = $this->model->esRespuestaCorrecta($_POST['pregunta_id'], $respuestaId);
+            $preguntaId=$_POST['pregunta_id'];
+            $idUsuario = $_SESSION['id_usuario'];
+            $idPartida = $_SESSION['id_partida'];
 
-            $_SESSION['preguntas_respuestas'][] = [
-                'pregunta_id' => $_POST['pregunta_id'],
-                'se_respondio_bien' => $esCorrecta
-            ];
+            $esCorrecta = $this->model->esRespuestaCorrecta($preguntaId, $respuestaId);
+
+
+            $this->model->guardarRespuestaEnPartida($idPartida, $preguntaId, $esCorrecta);
 
 
             if ($esCorrecta) {
@@ -48,7 +50,11 @@ class JuegoController
         unset($_SESSION['pagina_cargada']);
         unset($_SESSION['puntaje']);
         unset($_SESSION['puntaje_final']);
-        unset($_SESSION['preguntas_respuestas']);
+
+
+        $idUsuario = $_SESSION['id_usuario'];
+        $idPartida = $this->model->crearPartida($idUsuario);
+        $_SESSION['id_partida'] = $idPartida;
         header("Location: index.php?controller=Juego&action=get");
         exit();
     }
@@ -63,10 +69,15 @@ class JuegoController
 
     private function gameOver()
     {
+        $idPartida = $_SESSION['id_partida'];
         $puntaje = $_SESSION['puntaje'] ?? 0;
         $_SESSION['puntaje_final'] = $puntaje;
         $_SESSION['puntaje'] = 0;
+
         unset($_SESSION['pagina_cargada']);
+
+
+        $this->model->actualizarPuntajeFinal($idPartida, $puntaje);
         header("Location: index.php?controller=Juego&action=get&finalizado=true");
         exit;
     }
@@ -117,20 +128,19 @@ class JuegoController
         return $data;
     }
 
-    public function guardarPartidaSiTermino(array $data)
+    public function guardarPuntajeSiTermino(array $data)
     {
         if ($data['finalizado']) {
-            $this->guardarPartida($data['puntajeFinal']);
+            $this->actualizarPuntajeFinal($data['puntajeFinal']);
 
         }
     }
 
-    private function guardarPartida($puntajeFinal)
+    private function actualizarPuntajeFinal($puntajeFinal)
     {
-        if (isset($_SESSION['preguntas_respuestas'])) {
-            $preguntasRespuestas = $_SESSION['preguntas_respuestas'];
-            $idUsuario = $_SESSION['id_usuario'];
-            $this->model->guardarPartida($idUsuario, $puntajeFinal, $preguntasRespuestas);
+            $idPartida = $_SESSION['id_partida'];
+
+            $this->model->actualizarPuntajeFinal($idPartida, $puntajeFinal);
         }
-    }
+
 }
