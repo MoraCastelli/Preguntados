@@ -70,4 +70,16 @@ class GameModel
             return false;
         }
     }
+    public function obtenerEstiloCategoria($categoria) {
+        $categoriaEstilos = [
+            'Ciencia' => 'w3-green',
+            'Historia' => 'w3-yellow',
+            'Entretenimiento' => 'w3-blue',
+            'Geografía' => 'w3-light-blue',
+            'Arte' => 'w3-red',
+            'Deporte' => 'w3-grey'
+        ];
+
+        return $categoriaEstilos[$categoria] ?? 'w3-light-grey';
+    }
 }

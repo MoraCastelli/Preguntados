@@ -96,6 +96,7 @@ class JuegoController
         $preguntaId = $preguntaData['pregunta_id'];
         $respuestas = $preguntaData['respuestas'];
         $categoria = $preguntaData['categoria'];
+        $categoriaEstilo = $this->model->obtenerEstiloCategoria($categoria);
         $puntaje = $_SESSION['puntaje'] ?? 0;
         $finalizado = isset($_GET['finalizado']) && $_GET['finalizado'] == 'true';
         $puntajeFinal = $_SESSION['puntaje_final'] ?? null;
@@ -108,6 +109,7 @@ class JuegoController
             'pregunta_id' => $preguntaId,
             'respuestas' => $respuestas,
             'categoria' => $categoria,
+            'categoria_estilo'=> $categoriaEstilo,
             'puntaje' => $puntaje,
             'finalizado' => $finalizado,
             'puntajeFinal' => $finalizado ? $puntajeFinal : null
