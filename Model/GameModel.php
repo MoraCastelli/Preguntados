@@ -10,26 +10,28 @@ class GameModel
     }
     //falta agregar q no se repitan preguntas y que te de una de tu misma dificultad
 
-    public function obtenerPreguntaYRespuestas()
-    {
-        $queryPregunta = 'SELECT id, pregunta, categoría FROM pregunta ORDER BY RAND() LIMIT 1';
-        $preguntas = $this->database->query($queryPregunta);
 
+    public function obtenerPreguntaYRespuestas($idUsuario)
+    {
+        $preguntas = $this->queryPregunta($idUsuario);
+
+        if (empty($preguntas)) {
+
+            $this->limpiarPreguntasPartida($idUsuario);
+            return $this->obtenerPreguntaYRespuestas($idUsuario);
+
+        }
         $pregunta = $preguntas[0];
         $preguntaId = (int) $pregunta['id'];
 
-        $queryRespuestas = "SELECT respuesta, es_la_correcta,id FROM respuesta WHERE pregunta = $preguntaId";
-        $respuestas = $this->database->query($queryRespuestas);
 
-        shuffle($respuestas);
-
+        $respuestas = $this->queryRespuestas($preguntaId);
         $resultado = [
             'pregunta_id' => $preguntaId,
             'pregunta' => $pregunta['pregunta'],
             'respuestas' => $respuestas,
             'categoria' => $pregunta['categoría']
         ];
-
         return $resultado;
     }
 
@@ -92,4 +94,44 @@ class GameModel
 
         return $categoriaEstilos[$categoria] ?? 'w3-light-grey';
     }
+
+    private function limpiarPreguntasPartida($idUsuario)
+    {
+        $queryLimpiar = "
+        DELETE pp 
+        FROM partida_pregunta pp
+        JOIN partida p ON pp.partida = p.id
+        WHERE p.jugador = '$idUsuario'";
+        $this->database->execute($queryLimpiar);
+    }
+
+
+    public function queryRespuestas(int $preguntaId)
+    {
+        $queryRespuestas = "SELECT respuesta, es_la_correcta,id FROM respuesta WHERE pregunta = $preguntaId";
+        $respuestas = $this->database->query($queryRespuestas);
+        shuffle($respuestas);
+        return $respuestas;
+    }
+
+
+    public function queryPregunta($idUsuario)
+    {
+        $idUsuario=(int)$idUsuario;
+        $queryPregunta = "
+            SELECT p.id, p.pregunta, p.categoría 
+            FROM pregunta p
+            WHERE p.id NOT IN (
+                SELECT pp.pregunta 
+                FROM partida_pregunta pp
+                JOIN partida pa ON pp.partida = pa.id
+                WHERE pa.jugador = '$idUsuario'
+            )
+            ORDER BY RAND() 
+            LIMIT 1";
+        $preguntas = $this->database->query($queryPregunta);
+        return $preguntas;
+    }
+
+
 }
