@@ -17,7 +17,6 @@ class JuegoController
         $this->filtroAntiF5();
         $data = $this->obtenerDataParaPartida();
         $this->guardarPuntajeSiTermino($data);
-
         $this->presenter->render("View/lobby.mustache", $data);
     }
 
@@ -26,7 +25,7 @@ class JuegoController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $respuestaId = $_POST['respuesta_id'];
             $preguntaId=$_POST['pregunta_id'];
-            $idUsuario = $_SESSION['id_usuario'];
+
             $idPartida = $_SESSION['id_partida'];
 
             $esCorrecta = $this->model->esRespuestaCorrecta($preguntaId, $respuestaId);
@@ -102,7 +101,7 @@ class JuegoController
     {
         $_SESSION['pagina_cargada'] = true;
         $nombreUsuario = $_SESSION['usuario'];
-        $preguntaData = $this->model->obtenerPreguntaYRespuestas();
+        $preguntaData = $this->model->obtenerPreguntaYRespuestas($_SESSION['id_usuario']);
         $pregunta = $preguntaData['pregunta'];
         $preguntaId = $preguntaData['pregunta_id'];
         $respuestas = $preguntaData['respuestas'];
