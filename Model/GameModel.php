@@ -10,54 +10,66 @@ class GameModel
     }
     //falta agregar q no se repitan preguntas y que te de una de tu misma dificultad
 
-    public function obtenerPreguntaYRespuestas()
-    {
-        $queryPregunta = 'SELECT id, pregunta, categoría FROM pregunta ORDER BY RAND() LIMIT 1';
-        $preguntas = $this->database->query($queryPregunta);
 
+    public function obtenerPreguntaYRespuestas($idUsuario)
+    {
+        $preguntas = $this->queryPregunta($idUsuario);
+
+        if (empty($preguntas)) {
+
+            $this->limpiarPreguntasPartida($idUsuario);
+            return $this->obtenerPreguntaYRespuestas($idUsuario);
+
+        }
         $pregunta = $preguntas[0];
         $preguntaId = (int) $pregunta['id'];
 
-        $queryRespuestas = "SELECT respuesta, es_la_correcta,id FROM respuesta WHERE pregunta = $preguntaId";
-        $respuestas = $this->database->query($queryRespuestas);
 
-        shuffle($respuestas);
-
+        $respuestas = $this->queryRespuestas($preguntas);
         $resultado = [
             'pregunta_id' => $preguntaId,
             'pregunta' => $pregunta['pregunta'],
             'respuestas' => $respuestas,
             'categoria' => $pregunta['categoría']
         ];
-
         return $resultado;
     }
 
 
-    public function guardarPartida($idUsuario, $puntajeFinal, $preguntasRespuestas)
+    public function crearPartida($idUsuario)
     {
         try {
-
-            $queryInsertPartida = "INSERT INTO partida (puntaje, jugador) VALUES ('$puntajeFinal', '$idUsuario')";
+            $queryInsertPartida = "INSERT INTO partida (puntaje, jugador) VALUES (0, '$idUsuario')";
             $this->database->execute($queryInsertPartida);
-
-
             $partidaId = $this->database->getLastInsertId();
-
-
-            foreach ($preguntasRespuestas as $preguntaRespuesta) {
-                $preguntaId = $preguntaRespuesta['pregunta_id'];
-                $seRespondioBien = $preguntaRespuesta['se_respondio_bien'];
-
-                $queryInsertPartidaPregunta = "INSERT INTO partida_pregunta (partida, pregunta, se_respondio_bien) VALUES ('$partidaId', '$preguntaId', '$seRespondioBien')";
-                $this->database->execute($queryInsertPartidaPregunta);
-            }
+            return $partidaId;
         } catch (Exception $e) {
-
-            echo "Error al guardar la partida: " . $e->getMessage();
+            echo "Error al crear la partida: " . $e->getMessage();
+            return null;
         }
-
     }
+
+    public function guardarRespuestaEnPartida($idPartida, $preguntaId, $esCorrecta)
+    {
+        try {
+            $queryInsertPartidaPregunta = "INSERT INTO partida_pregunta (partida, pregunta, se_respondio_bien) VALUES ('$idPartida', '$preguntaId', '$esCorrecta')";
+            $this->database->execute($queryInsertPartidaPregunta);
+        } catch (Exception $e) {
+            echo "Error al guardar la respuesta: " . $e->getMessage();
+        }
+    }
+
+
+    public function actualizarPuntajeFinal($idPartida, $puntajeFinal)
+    {
+        try {
+            $queryUpdatePartida = "UPDATE partida SET puntaje = '$puntajeFinal' WHERE id = '$idPartida'";
+            $this->database->execute($queryUpdatePartida);
+        } catch (Exception $e) {
+            echo "Error al actualizar el puntaje final: " . $e->getMessage();
+        }
+    }
+
     public function esRespuestaCorrecta($preguntaId, $respuestaId)
     {
         $query = "SELECT es_la_correcta FROM respuesta WHERE id = '$respuestaId' AND pregunta = '$preguntaId'";
@@ -82,4 +94,46 @@ class GameModel
 
         return $categoriaEstilos[$categoria] ?? 'w3-light-grey';
     }
+
+    private function limpiarPreguntasPartida($idUsuario)
+    {
+        $queryLimpiar = "
+        DELETE pp 
+        FROM partida_pregunta pp
+        JOIN partida p ON pp.partida = p.id
+        WHERE p.jugador = '$idUsuario'";
+        $this->database->execute($queryLimpiar);
+    }
+
+
+    public function queryRespuestas(int $preguntaId)
+    {
+        $queryRespuestas = "SELECT respuesta, es_la_correcta,id FROM respuesta WHERE pregunta = $preguntaId";
+        $respuestas = $this->database->query($queryRespuestas);
+        shuffle($respuestas);
+        return $respuestas;
+    }
+
+    /**
+     * @param $idUsuario
+     * @return mixed
+     */
+    public function queryPregunta($idUsuario)
+    {
+        $queryPregunta = "
+            SELECT p.id, p.pregunta, p.categoría 
+            FROM pregunta p
+            WHERE p.id NOT IN (
+                SELECT pp.pregunta 
+                FROM partida_pregunta pp
+                JOIN partida pa ON pp.partida = pa.id
+                WHERE pa.jugador = '$idUsuario'
+            )
+            ORDER BY RAND() 
+            LIMIT 1";
+        $preguntas = $this->database->query($queryPregunta);
+        return $preguntas;
+    }
+
+
 }
