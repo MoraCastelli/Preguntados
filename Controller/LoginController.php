@@ -21,7 +21,7 @@ class LoginController
 
             // Realizar la validación del usuario y contraseña
             if ($this->model->LogInconsulta($usuario, $password)) {
-                $_SESSION["usuario"] = $usuario;
+
                 unset($_SESSION["error_login"]);
             } else {
                 $_SESSION["error_login"] = "Usuario o contraseña incorrectos. presta atencion mora";

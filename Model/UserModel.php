@@ -10,25 +10,38 @@ class   UserModel
         $this->database = $database;
     }
 
-// ta rotisimo
-    public function registrarUsuario($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $foto_de_perfil)
+    public function registrarJugador($nombre, $apellido, $ano_de_nacimiento, $sexo, $mail, $contrasena, $nombre_de_usuario, $foto_de_perfil)
     {
-        $sql = "INSERT INTO usuario (nombre, apellido, ano_de_nacimiento, sexo, mail, contrasena, nombre_de_usuario, foto_de_perfil) 
-            VALUES ('$nombre', '$apellido', $ano_de_nacimiento, '$sexo', '$mail', '$contrasena', '$nombre_de_usuario', '$foto_de_perfil')";
-
-
+        // Inserta en jugador
+        $sql = "INSERT INTO usuario (nombre_de_usuario, contrasena, nombre, apellido, ano_de_nacimiento, sexo, mail, foto_de_perfil, pais, ciudad, cuenta_verificada, hash_activacion)
+                   VALUES ('$nombre_de_usuario', '$contrasena', '$nombre', '$apellido', '$ano_de_nacimiento', '$sexo', '$mail', '$foto_de_perfil', '...', '..', FALSE, '..')";
+        
         $this->database->execute($sql);
+
+        // Obtén el ID del usuario recién insertado e insertarlo en jugador
+        $idJugador = $this->database->getLastInsertId();
+        $sqlJugador = "INSERT INTO jugador (id) VALUES ($idJugador)";
+
+        $this->database->execute($sqlJugador);
     }
 
-        public function LogInconsulta($usuario, $password)
+    public function LogInconsulta($usuario, $password)
     {
 
         $sql = "SELECT * FROM usuario WHERE nombre_de_usuario = '$usuario' AND contrasena= '$password'";
 
-        $result =  $this->database->execute($sql);
+        $result = $this->database->execute($sql);
 
-        // Si se encuentra un resultado, es válido
-        return $result->num_rows == 1 && $this->emailVerificado();
+        if ($result->num_rows == 1 && $this->emailVerificado()) {
+            $usuario = $result->fetch_assoc();
+
+            $_SESSION["usuario"] = $usuario["nombre_de_usuario"];
+            $_SESSION['id_usuario'] = $usuario['id_usuario'];
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private function emailVerificado($codigo_activacion)
@@ -86,7 +99,8 @@ class   UserModel
     }
 }
 
-    public function verPerfil(){
+    public function verPerfil()
+    {
         $usuario = $_SESSION["usuario"];
         $sql = "SELECT * FROM usuario WHERE nombre_de_usuario = '$usuario'";
         $resultado = $this->database->query($sql);
